@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load i18n %}
+
+<head>
+    <meta charset="UTF-8">
+    <title>App1</title>
+</head>
+<body>
+
+<form action="{% url 'set_language' %}" method="POST"> {% csrf_token %}
+    <input type="hidden" name="next" value="{{ redirect_to }}">
+    <select name="language" id="">
+        {% get_available_languages as LANGUAGES %}
+        {% get_language_info_list for LANGUAGES as languages %}
+        {% get_current_language as LANG %}
+        <option>
+            {{LANG|language_name_local}} - {{ LANG }}
+        </option>
+        {% for language in languages %}
+            {% if language.code != LANG %}
+            <option class="selected" value="{{language.code}}" >
+                {{ language.name_local }} - {{ language.code }}
+            </option>
+            {% endif %}
+        {% endfor %}
+    </select>
+    <input type="submit" value="set">
+</form>
+<div>{{LANG}}</div>
+<h1>{{ string }}</h1>
+{% trans "Test translation" %}
+</body>
+</html>
